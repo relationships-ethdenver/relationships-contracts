@@ -1,0 +1,256 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #282c34;
+  color: white;
+}
+
+.App-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.connect-btn {
+  background-color: #61dafb;
+  color: #282c34;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  margin: 20px 0;
+  transition: background-color 0.3s;
+}
+
+.connect-btn:hover {
+  background-color: #4fa8c7;
+}
+
+.account-info {
+  background: rgba(97, 218, 251, 0.1);
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.create-ship-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.create-ship-section input {
+  padding: 10px;
+  margin: 10px;
+  width: 80%;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+
+.create-ship-btn {
+  background-color: #61dafb;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+
+.create-ship-btn:hover:not(:disabled) {
+  background-color: #4fa8c7;
+}
+
+.create-ship-btn:disabled {
+  background-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.ships-list {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.ship-item {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.ship-item h3 {
+  margin-top: 0;
+  color: #61dafb;
+}
+
+.ship-item p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.ship-controls {
+  margin: 15px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.lock-btn {
+  background-color: #ff9800;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.lock-btn:hover:not(:disabled) {
+  background-color: #f57c00;
+}
+
+.lock-btn.locked {
+  background-color: #f44336;
+}
+
+.lock-btn.locked:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+.token-mint {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mint-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid #4a4a4a;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: white;
+  font-size: 14px;
+}
+
+.mint-input:disabled {
+  background: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.mint-token-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  min-width: 100px;
+}
+
+.mint-token-btn:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.mint-token-btn:disabled {
+  background-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.token-creation {
+  margin-top: 15px;
+}
+
+.create-token-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.create-token-btn:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.create-token-btn:disabled {
+  background-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.token-send {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #4a4a4a;
+}
+
+.send-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid #4a4a4a;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: white;
+  font-size: 14px;
+}
+
+.send-input:disabled {
+  background: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.send-token-btn {
+  background-color: #2196f3;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  min-width: 100px;
+}
+
+.send-token-btn:hover:not(:disabled) {
+  background-color: #1976d2;
+}
+
+.send-token-btn:disabled {
+  background-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+.locked-message {
+  color: #ff4444;
+  margin-left: 10px;
+  font-size: 14px;
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPFS File Upload</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/node_modules/@web3-storage/w3up-client/dist/src/index.js" type="module"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>IPFS File Upload</h1>
+        <div class="upload-area" id="dropZone">
+            <div class="upload-content">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='17 8 12 3 7 8'%3E%3C/polyline%3E%3Cline x1='12' y1='3' x2='12' y2='15'%3E%3C/line%3E%3C/svg%3E" alt="upload icon">
+                <p>Drag and drop files here<br>or</p>
+                <label for="fileInput" class="upload-button">Choose File</label>
+                <input type="file" id="fileInput" hidden>
+            </div>
+        </div>
+        <div id="uploadStatus" class="upload-status"></div>
+        <button id="ipfsUpload" class="ipfs-button" style="display: none;">Upload to IPFS</button>
+    </div>
+    <script type="module">
+        const ACCOUNT_DID = 'did:key:z4MXj1wBzi9jUstyPmr4Cc9o4bsFknVWp6SsnjgMUJ4Ck2jw4gopW52W7B3XYopJsGFs3jWyqq4zXpyV5bSBvKf5VF8o1uZn8iRgbMXBj2S2H4p5TJxENRrnUPHF2Rd8i2QwfUYhtbaZtad9zXnpk2p3ZW6oir1xUYmxeqzZBhNSm31F48zEFaQVD88PtNnyhdWStMdHXNfb2LLifEFzMQUYATBbx9TpFpTSApCwa85pwHsMUi5AXaagD8HzccjNm6PE3w1h1PqKqssW7DkNc8mwWfkJZi7WMVduUkniUrLqNzLtEXm5wkYUR6qF4qrCSgHcwhv7nxc3Zju3TMcb2DYpNM4i83yX7VHhJPLrcGgpcLiusxqKv';
+        const SPACE_DID = 'did:key:z6MknNtFnjpgLcVcBkuhneuKWuC8X52ViFja5BkSRRKaFgre';
+        
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const ipfsUpload = document.getElementById('ipfsUpload');
+        let selectedFile = null;
+        let client = null;
+
+        // Initialize Storacha client
+        async function initStorachaClient() {
+            try {
+                const { create } = await import('@web3-storage/w3up-client');
+                client = await create();
+                await client.setDID(ACCOUNT_DID);
+                
+                // Set up space relationship
+                await client.addSpace(SPACE_DID);
+                await client.setCurrentSpace(SPACE_DID);
+                
+                console.log('Storacha client initialized with space');
+                return true;
+            } catch (error) {
+                console.error('Storacha client initialization error:', error);
+                throw error;
+            }
+        }
+
+        // Upload file to IPFS using Storacha client
+        async function uploadToIPFS(file) {
+            if (!client) {
+                await initStorachaClient();
+            }
+
+            const { uploadFile } = await import('@web3-storage/w3up-client');
+            // Upload file to the current space
+            const cid = await uploadFile(client, file);
+            return cid;
+        }
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone when dragging over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('highlight');
+        }
+
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                selectedFile = files[0];
+                uploadStatus.textContent = `Selected file: ${selectedFile.name}`;
+                uploadStatus.style.display = 'block';
+                ipfsUpload.style.display = 'block';
+            }
+        }
+
+        ipfsUpload.addEventListener('click', async () => {
+            if (!selectedFile) {
+                alert('Please select a file first');
+                return;
+            }
+
+            try {
+                uploadStatus.textContent = 'Initializing Storacha client...';
+                if (!client) {
+                    await initStorachaClient();
+                }
+
+                uploadStatus.textContent = 'Uploading to IPFS...';
+                const cid = await uploadToIPFS(selectedFile);
+
+                console.log('Upload complete! CID:', cid);
+                uploadStatus.innerHTML = `Upload complete!<br>
+                    IPFS CID: <code>${cid}</code><br>
+                    View file: <a href="https://w3s.link/ipfs/${cid}/${selectedFile.name}" target="_blank">https://w3s.link/ipfs/${cid}/${selectedFile.name}</a>`;
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                uploadStatus.textContent = `Error: ${error.message}`;
+                if (error.stack) {
+                    console.error('Error stack:', error.stack);
+                }
+            }
+        });
+
+        // Initialize client on page load
+        initStorachaClient().catch(console.error);
+    </script>
+</body>
+</html>

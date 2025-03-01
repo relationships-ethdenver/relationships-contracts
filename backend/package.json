@@ -1,0 +1,17 @@
+{
+  "name": "relationship",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "arweave": "^1.15.5",
+    "ethers": "^6.13.5"
+  }
+}
